@@ -2,7 +2,6 @@ class Item:
     def __init__(self, name, holdable, ):
         self.name = name
         self.holdable = holdable
-        self.get_descriptions(name)
+        self.examine_text = ''
+        self.pickup_text = ''
 
-    def get_descriptions(self, name):
-        pass
