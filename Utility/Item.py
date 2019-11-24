@@ -46,16 +46,16 @@ class Door(Item):
         self.room2 = room2
 
     def get_examine(self, player: Player):
-        if player.cur_room == self.room1:
+        if player.cur_room.name == self.room1:
             if self.interact.fulfilled:
-                return "The unlocked door leads to the " + self.room2.name
+                return "The unlocked door leads to the " + self.room2
             else:
-                return "The locked door leads to the " + self.room2.name
+                return "The locked door leads to the " + self.room2
         else:
             if self.interact.fulfilled:
-                return "The unlocked door leads to the " + self.room1.name
+                return "The unlocked door leads to the " + self.room1
             else:
-                return "The locked door leads to the " + self.room1.name
+                return "The locked door leads to the " + self.room1
 
     def interactFunction(self, player: Player):
         playerTools = player.skills.append(player.clues.append(player.held_obj))

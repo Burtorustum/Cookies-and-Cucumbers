@@ -8,7 +8,7 @@ from Instantiations.Bedroom import *
 
 
 def game_start(player: Player, window: GraphWin):
-    update_window(player, window, gen_buttons(player, window))
+    update_window(player, window, None)
     click_button(player, window)
 
 
@@ -18,21 +18,25 @@ def click_button(player: Player, window: GraphWin, cur_item=None):
         buttons = gen_buttons(player, window)
     else:
         buttons = gen_object_buttons(player, window, cur_item)
-
     click = window.getMouse()
     s = None
     for b in buttons:
         if b.is_pressed(click):
             cur_item = b.item
             s = b.func(player)
-            print("clicked" + str(b))
 
-    update_window(player, window, buttons, s)
+    update_window(player, window, cur_item, s)
     click_button(player, window, cur_item)
 
 
-def update_window(player: Player, window: GraphWin, buttons, s=None):
+def update_window(player: Player, window: GraphWin, cur_item=None, s=None):
     window.delete("all")  # remove all current things in window
+
+    buttons = None
+    if cur_item is None:  # get the buttons
+        buttons = gen_buttons(player, window)
+    else:
+        buttons = gen_object_buttons(player, window, cur_item)
 
     player_notes(player, window)  # redraw the left hand stuff
     context(player, window, s)  # redraw the top stuff
@@ -53,16 +57,27 @@ def gen_buttons(player: Player, window: GraphWin):
     x = 250 + xdiff
     ydiff = 43
     y = 187.5 + ydiff
+    i = 0
     for i in range(len(objects)):
         o = objects[i]
-        x += 3*xdiff
-        if (i+1) % 4 == 0:
+        if i % 5 == 0:
             y += 3*ydiff
             x = 250 + xdiff
         rect = Rectangle(Point(x,y), Point(x+2*xdiff, y + 2*ydiff))
         text = Text(Point((2*x + 2*xdiff)/2, (2*y + 2*ydiff)/2), o.name)
         b = Button(rect, text, o, o.get_examine)
         buttons.append(b)
+        x += 3 * xdiff
+
+    if (i+1) % 5 == 0:
+        y += 3 * ydiff
+        x = 250 + xdiff
+
+    drop_button_rect = Rectangle(Point(x, y), Point(x + 2 * xdiff, y + 2 * ydiff))
+    drop_button_text = Text(Point((2 * x + 2 * xdiff) / 2, (2 * y + 2 * ydiff) / 2), "Drop Item")
+    drop_button = Button(drop_button_rect, drop_button_text, None, act.drop)
+    buttons.append(drop_button)
+
     return buttons
 
 
@@ -76,13 +91,13 @@ def gen_object_buttons(player: Player, window: GraphWin, item: Item):
     middle = (right + left) / 2
 
     interact_box = Rectangle(Point(left, 187.5 + diff), Point(right, 187.5 + 3*diff))
-    interact_text = Text(Point(middle, (187.5 * 2 + 10 * diff) / 2), "Interact")
+    interact_text = Text(Point(middle, (187.5 * 2 + 4 * diff) / 2), "Interact")
 
     pickup_box = Rectangle(Point(left, 187.5 + 4*diff), Point(right, 187.5 + 6*diff))
-    pickup_text = Text(Point(middle, (187.5 * 2 + 16 * diff) / 2), "Pickup")
+    pickup_text = Text(Point(middle, (187.5 * 2 + 10 * diff) / 2), "Pickup")
 
     return [Button(interact_box, interact_text, None, item.interact.getText),
-            Button(pickup_box, pickup_text, None, act.pick_up(player, item))]
+            Button(pickup_box, pickup_text, None, lambda x : act.pick_up(x, item))]
 
 
 # TODO: Decide what else goes in here
@@ -125,9 +140,9 @@ def context(player: Player, window: GraphWin, s):
 
 def main():
     player = Player()
-    player.cur_room = Bedroom
+    player.cur_room = bedroom
 
-    window = GraphWin("Cucumbers and Cookies", 1400, 750, autoflush=False)
+    window = GraphWin("Cookies and Cucumbers", 1400, 750, autoflush=False)
 
     game_start(player, window)
 
