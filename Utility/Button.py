@@ -8,9 +8,9 @@ class Button:
         self.func = function
 
     def draw(self, window: GraphWin):
-        self.rectangle.draw(window)
+        self.rect.draw(window)
         self.text.draw(window)
 
     def is_pressed(self, click: Point):
         return self.rect.getP1().x < click.x < self.rect.getP2().x and \
-               self.rect.getP2().y < click.y < self.rect.getP1().y
+               self.rect.getP1().y < click.y < self.rect.getP2().y

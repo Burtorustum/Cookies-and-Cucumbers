@@ -17,6 +17,7 @@ def interact(player: Player, item: Item):
 def pick_up(player: Player, item: Item):
     if item.holdable and player.held_obj is None:
         player.held_obj = item
+        player.cur_room.objects.remove(item)
         return item.pickup
     elif not item.holdable:
         return item.pickup
@@ -27,10 +28,10 @@ def pick_up(player: Player, item: Item):
                "holding."
 
 
-def drop(player: Player, currentRoom: Room):
+def drop(player: Player):
     held_obj = player.held_obj
     if held_obj is not None:
-        currentRoom.objects.append(held_obj)
+        player.cur_room.objects.append(held_obj)
         player.held_obj = None
         return "You dropped the " + held_obj
     else:

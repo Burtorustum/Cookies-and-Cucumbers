@@ -8,7 +8,7 @@ from Instantiations.Bedroom import *
 
 
 def game_start(player: Player, window: GraphWin):
-    update_window(player, window, [])
+    update_window(player, window, gen_buttons(player, window))
     click_button(player, window)
 
 
@@ -25,6 +25,7 @@ def click_button(player: Player, window: GraphWin, cur_item=None):
         if b.is_pressed(click):
             cur_item = b.item
             s = b.func(player)
+            print("clicked" + str(b))
 
     update_window(player, window, buttons, s)
     click_button(player, window, cur_item)
@@ -42,18 +43,25 @@ def update_window(player: Player, window: GraphWin, buttons, s=None):
     window.update()
 
 
-# TODO: FINISH
 def gen_buttons(player: Player, window: GraphWin):
     objects = player.cur_room.objects
     # get current room
     # get objects in current room
     # make button for each object in room, the function for which should be the examine func
     buttons = []
+    xdiff = 71.875
+    x = 250 + xdiff
+    ydiff = 43
+    y = 187.5 + ydiff
     for i in range(len(objects)):
         o = objects[i]
-        rect = Rectangle(Point(), Point())
-        text = Text(Point(), o.name)
-        b = Button(rect, text, o, o.get_examine())
+        x += 3*xdiff
+        if (i+1) % 4 == 0:
+            y += 3*ydiff
+            x = 250 + xdiff
+        rect = Rectangle(Point(x,y), Point(x+2*xdiff, y + 2*ydiff))
+        text = Text(Point((2*x + 2*xdiff)/2, (2*y + 2*ydiff)/2), o.name)
+        b = Button(rect, text, o, o.get_examine)
         buttons.append(b)
     return buttons
 
@@ -74,7 +82,7 @@ def gen_object_buttons(player: Player, window: GraphWin, item: Item):
     pickup_text = Text(Point(middle, (187.5 * 2 + 16 * diff) / 2), "Pickup")
 
     return [Button(interact_box, interact_text, None, item.interact.getText),
-            Button(pickup_box, pickup_text, None, item.get_pickup)]
+            Button(pickup_box, pickup_text, None, act.pick_up(player, item))]
 
 
 # TODO: Decide what else goes in here

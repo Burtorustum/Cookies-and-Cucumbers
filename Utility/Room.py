@@ -1,8 +1,4 @@
-from Utility import Item
-
-
 class Room:
-
     def __init__(self, name: str, objects: list, description: str, adjRooms: list):
         self.name = name
         self.objects = objects

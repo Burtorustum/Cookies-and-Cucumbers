@@ -1,9 +1,9 @@
 from .Interactions import *
 from .Room import *
+from .Player import *
 
 
 class Item:
-
     """
     An Item represents an object in the game with associated actions, where:
         - examine represents a list of "Examine" command responses. If object is changeable (i.e. Interaction can be
@@ -12,7 +12,8 @@ class Item:
         - interact is the Interaction object for the item
         - holdable represents whether or not the object can be held
     """
-    def __init__(self, name, examine : list, pickup : str, interact : Interaction, holdable : bool):
+
+    def __init__(self, name, examine: list, pickup: str, interact: Interaction, holdable: bool):
         self.name = name
         self.examine = examine
         self.pickup = pickup
@@ -21,11 +22,14 @@ class Item:
 
     # Returns appropriate "Examine" command text
     # and yes the player parameter is useless but I'm tired and I want the override below to work so oh well.
-    def getExamine(self, player: Player):
+    def get_examine(self, player: Player):
         if self.interact.fulfilled is False:
             return self.examine[1]
         else:
             return self.examine[0]
+
+    def get_pickup(self, player: Player):
+        return self.pickup
 
 
 class Door(Item):
@@ -41,12 +45,12 @@ class Door(Item):
         self.room1 = room1
         self.room2 = room2
 
-    def getExamine(self, player: Player):
+    def get_examine(self, player: Player):
         if player.cur_room == self.room1:
-           if self.interact.fulfilled:
-               return "The unlocked door leads to the " + self.room2.name
-           else:
-               return "The locked door leads to the " + self.room2.name
+            if self.interact.fulfilled:
+                return "The unlocked door leads to the " + self.room2.name
+            else:
+                return "The locked door leads to the " + self.room2.name
         else:
             if self.interact.fulfilled:
                 return "The unlocked door leads to the " + self.room1.name
