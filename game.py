@@ -52,28 +52,28 @@ def gen_buttons(player: Player, window: GraphWin):
     # get objects in current room
     # make button for each object in room, the function for which should be the examine func
     buttons = []
-    xdiff = 71.875
-    x = 250 + xdiff
-    ydiff = 43
-    y = 187.5 + ydiff
+    x_diff = 71.875
+    x = 250 + x_diff
+    y_diff = 43
+    y = 187.5 + y_diff
     i = 0
     for i in range(len(objects)):
         o = objects[i]
         if i % 5 == 0:
-            y += 3 * ydiff
-            x = 250 + xdiff
-        rect = Rectangle(Point(x, y), Point(x + 2 * xdiff, y + 2 * ydiff))
-        text = Text(Point((2 * x + 2 * xdiff) / 2, (2 * y + 2 * ydiff) / 2), o.name)
+            y += 3 * y_diff
+            x = 250 + x_diff
+        rect = Rectangle(Point(x, y), Point(x + 2 * x_diff, y + 2 * y_diff))
+        text = Text(Point((2 * x + 2 * x_diff) / 2, (2 * y + 2 * y_diff) / 2), o.name)
         b = Button(rect, text, o, o.get_examine)
         buttons.append(b)
-        x += 3 * xdiff
+        x += 3 * x_diff
 
     if (i + 1) % 5 == 0:
-        y += 3 * ydiff
-        x = 250 + xdiff
+        y += 3 * y_diff
+        x = 250 + x_diff
 
-    drop_button_rect = Rectangle(Point(x, y), Point(x + 2 * xdiff, y + 2 * ydiff))
-    drop_button_text = Text(Point((2 * x + 2 * xdiff) / 2, (2 * y + 2 * ydiff) / 2), "Drop Item")
+    drop_button_rect = Rectangle(Point(x, y), Point(x + 2 * x_diff, y + 2 * y_diff))
+    drop_button_text = Text(Point((2 * x + 2 * x_diff) / 2, (2 * y + 2 * y_diff) / 2), "Drop Item")
     drop_button = Button(drop_button_rect, drop_button_text, None, act.drop)
     buttons.append(drop_button)
 
@@ -132,7 +132,7 @@ def context(player: Player, window: GraphWin, s):
     else:
         context_string = s
 
-    context_text = Text(Point(window.getWidth() / 2 + 125, window.getHeight() / 15), context_string)
+    context_text = Text(Point(window.getWidth() / 2 + 125, window.getHeight() / 9), context_string)
     context_text.setSize(18)
     context_text.draw(window)
 

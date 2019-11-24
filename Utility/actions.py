@@ -23,9 +23,9 @@ def pick_up(player: Player, item: Item):
         return item.get_pickup(player)
     else:
         return "You're already carrying " + player.held_item.name + \
-               ", and though you are self-assured in your extremely large arms for a child," \
-               " you can't quite carry both objects. You should really work on growing. Or maybe just drop what you're" \
-               "holding."
+               ", and though you are self-assured in your extremely large arms for a child,\n" \
+               " you can't quite carry both objects. You should really work on growing. \nOr maybe just drop what " \
+               "you're holding."
 
 
 def drop(player: Player):
