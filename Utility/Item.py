@@ -35,11 +35,11 @@ class Item:
 class Door(Item):
 
     def __init__(self, name, room1: Room, room2: Room, locked: bool, interactDict={}, requiredItems=[]):
-        interactRequire = requiredItems.append(["lockpicking", "pin"])
+        requiredItems.append(["lockpicking", "pin"])
         interactDict["lockpicking pin"] = "Using your nimble fingers and recently acquired bobby pin, you carefully " \
                                           "pick the door's lock."
         interactDict["fulfilled"] = "You open the unlocked door, and move into the adjacent room."
-        doorInteract = Interaction(0, interactDict, interactRequire, (not locked), self.interactFunction)
+        doorInteract = Interaction(0, interactDict, requiredItems, (not locked), self.interactFunction)
         super().__init__(name, [], "You try to wrap your arms around the door to yank it off its hinges,"
                                    " but unsurprisingly, you can't do that. Oh well.", doorInteract, False)
         self.room1 = room1
@@ -58,19 +58,19 @@ class Door(Item):
                 return "The locked door leads to the " + self.room1
 
     def interactFunction(self, player: Player):
-        playerTools = player.skills.append(player.clues.append(player.held_obj))
+        playerTools = player.skills.append(player.clues.append(player.held_item))
         for items in self.interact.required:
             fulfilled = all((lambda x: x in playerTools) for item in items)
             if fulfilled:
-                keyName = "".join(items)
+                keyName = " ".join(items)
                 self.fulfilled = True
                 return self.interact.text[keyName]
         else:
-            if self.fulfilled:
-                if player.cur_room == self.room1:
-                    player.cur_room = self.room2
+            if self.fulfilled: # TODO: Check fulfillment first
+                if player.cur_room.name == self.room1:
+                    player.cur_room = name_to_room(self.room2)  # TODO: Implement name_to_room
                 else:
-                    player.cur_room = self.room1
+                    player.cur_room = name_to_room(self.room1)
                 return self.interact.text["fulfilled"]
             else:
                 return self.interact.text[self.interact.currentLevel]

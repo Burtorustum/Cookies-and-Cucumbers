@@ -34,7 +34,7 @@ class Interaction:
             for items in self.required:
                 fulfilled = all((lambda x: x in playerTools) for item in items)
                 if fulfilled:
-                    keyName = "".join(items)
+                    keyName = " ".join(items)
                     self.fulfilled = True
                     return self.text[keyName]
             else:
@@ -44,4 +44,4 @@ class Interaction:
                     self.changeInteraction(1)
                     return self.text[self.currentLevel]
         else:
-            return self.interactFunc(self, player)
+            return self.interactFunc(player)
