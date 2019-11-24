@@ -3,8 +3,7 @@ from Utility.Button import Button
 import Utility.actions as act
 from Utility.Player import Player
 from Utility.Room import Room
-from Utility.Item import Item
-from Instantiations.Bedroom import *
+from Utility.Item import *
 
 
 def game_start(player: Player, window: GraphWin):
