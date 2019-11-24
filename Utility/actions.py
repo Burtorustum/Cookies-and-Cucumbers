@@ -30,7 +30,7 @@ def pick_up(player: Player, item: Item):
 def drop(player: Player, currentRoom: Room):
     held_obj = player.held_obj
     if held_obj is not None:
-        currentRoom.objects.add(held_obj)
+        currentRoom.objects.append(held_obj)
         player.held_obj = None
         return "You dropped the " + held_obj
     else:
