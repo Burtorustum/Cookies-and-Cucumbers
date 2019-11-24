@@ -33,15 +33,14 @@ class Item:
 
 
 class Door(Item):
-
-    def __init__(self, name, room1: Room, room2: Room, locked: bool, interactDict={}, requiredItems=[]):
+    def __init__(self, name, room1: str, room2: str, locked: bool, interactDict={}, requiredItems=[]):
         requiredItems.append(["lockpicking", "pin"])
         interactDict["lockpicking pin"] = "Using your nimble fingers and recently acquired bobby pin, you carefully " \
                                           "pick the door's lock."
         interactDict["fulfilled"] = "You open the unlocked door, and move into the adjacent room."
-        doorInteract = Interaction(0, interactDict, requiredItems, (not locked), self.interactFunction)
+        door_interact = Interaction(0, interactDict, requiredItems, (not locked), self.interact_function)
         super().__init__(name, [], "You try to wrap your arms around the door to yank it off its hinges,"
-                                   " but unsurprisingly, you can't do that. Oh well.", doorInteract, False)
+                                   " but unsurprisingly, you can't do that. Oh well.", door_interact, False)
         self.room1 = room1
         self.room2 = room2
 
@@ -57,14 +56,14 @@ class Door(Item):
             else:
                 return "The locked door leads to the " + self.room1
 
-    def interactFunction(self, player: Player):
-        playerTools = player.skills.append(player.clues.append(player.held_item))
+    def interact_function(self, player: Player):
+        player_tools = player.skills.append(player.clues.append(player.held_item))
         for items in self.interact.required:
-            fulfilled = all((lambda x: x in playerTools) for item in items)
+            fulfilled = all((lambda x: x in player_tools) for item in items)
             if fulfilled:
-                keyName = " ".join(items)
+                key_name = " ".join(items)
                 self.fulfilled = True
-                return self.interact.text[keyName]
+                return self.interact.text[key_name]
         else:
             if self.fulfilled: # TODO: Check fulfillment first
                 if player.cur_room.name == self.room1:

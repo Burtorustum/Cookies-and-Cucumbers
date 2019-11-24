@@ -44,4 +44,4 @@ rockingHorse = Item("rocking horse", rockingHorseExamine, rockingHorsePickup, ro
 
 door = Door("door", "bedroom", "hallway", False)
 
-bedroom = Room("bedroom", [bunny, books, globe, rockingHorse, door], "You are in your own bedroom.", [])
+bedroom = Room("Bedroom", [bunny, books, globe, rockingHorse, door], "You are in your own bedroom.", [])

@@ -8,11 +8,11 @@ def move(room: Room):
 
 
 def examine(item: Item):
-    return item.get_examine()
+    return item.get_examine
 
 
 def interact(player: Player, item: Item):
-    return item.interact.getText(player)
+    return item.interact.get_text(player)
 
 
 def pick_up(player: Player, item: Item):

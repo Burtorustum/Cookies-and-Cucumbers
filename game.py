@@ -61,15 +61,15 @@ def gen_buttons(player: Player, window: GraphWin):
     for i in range(len(objects)):
         o = objects[i]
         if i % 5 == 0:
-            y += 3*ydiff
+            y += 3 * ydiff
             x = 250 + xdiff
-        rect = Rectangle(Point(x,y), Point(x+2*xdiff, y + 2*ydiff))
-        text = Text(Point((2*x + 2*xdiff)/2, (2*y + 2*ydiff)/2), o.name)
+        rect = Rectangle(Point(x, y), Point(x + 2 * xdiff, y + 2 * ydiff))
+        text = Text(Point((2 * x + 2 * xdiff) / 2, (2 * y + 2 * ydiff) / 2), o.name)
         b = Button(rect, text, o, o.get_examine)
         buttons.append(b)
         x += 3 * xdiff
 
-    if (i+1) % 5 == 0:
+    if (i + 1) % 5 == 0:
         y += 3 * ydiff
         x = 250 + xdiff
 
@@ -90,14 +90,14 @@ def gen_object_buttons(player: Player, window: GraphWin, item: Item):
     right = 1112.5
     middle = (right + left) / 2
 
-    interact_box = Rectangle(Point(left, 187.5 + diff), Point(right, 187.5 + 3*diff))
+    interact_box = Rectangle(Point(left, 187.5 + diff), Point(right, 187.5 + 3 * diff))
     interact_text = Text(Point(middle, (187.5 * 2 + 4 * diff) / 2), "Interact")
 
-    pickup_box = Rectangle(Point(left, 187.5 + 4*diff), Point(right, 187.5 + 6*diff))
+    pickup_box = Rectangle(Point(left, 187.5 + 4 * diff), Point(right, 187.5 + 6 * diff))
     pickup_text = Text(Point(middle, (187.5 * 2 + 10 * diff) / 2), "Pickup")
 
-    return [Button(interact_box, interact_text, None, item.interact.getText),
-            Button(pickup_box, pickup_text, None, lambda x : act.pick_up(x, item))]
+    return [Button(interact_box, interact_text, None, item.interact.get_text),
+            Button(pickup_box, pickup_text, None, lambda x: act.pick_up(x, item))]
 
 
 # TODO: Decide what else goes in here

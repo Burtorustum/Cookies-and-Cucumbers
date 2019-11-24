@@ -21,18 +21,18 @@ class Interaction:
         self.interactFunc = interactFunc
 
     # Changes the current interaction level by the given amount, bounding it within range [0, interaction.levels]
-    def changeInteraction(self, changeAmount: int):
-        self.currentLevel = max(0, min(self.currentLevel + changeAmount, self.levels))
+    def change_interaction(self, change_amount: int):
+        self.currentLevel = max(0, min(self.currentLevel + change_amount, self.levels))
 
     # Returns the appropriate response to "Interact" command,
     # with required objects taking precedence over interaction level
     # i.e. if a player is on interaction level 1 and also has gathered all required skills, objects, and clues to
     # interact with object, will return the latter interact text
-    def getText(self, player: Player):
+    def get_text(self, player: Player):
         if self.interactFunc is None:
-            playerTools = player.skills.append(player.clues.append(player.held_item))
+            player_tools = player.skills.append(player.clues.append(player.held_item))
             for items in self.required:
-                fulfilled = all((lambda x: x in playerTools) for item in items)
+                fulfilled = all((lambda x: x in player_tools) for item in items)
                 if fulfilled:
                     keyName = " ".join(items)
                     self.fulfilled = True
@@ -41,7 +41,7 @@ class Interaction:
                 if self.fulfilled:
                     return self.text["fulfilled"]
                 else:
-                    self.changeInteraction(1)
+                    self.change_interaction(1)
                     return self.text[self.currentLevel]
         else:
             return self.interactFunc(player)

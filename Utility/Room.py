@@ -6,6 +6,6 @@ class Room:
         self.adjRooms = adjRooms
 
     # Returns the appropriate "Look Around" command response
-    def lookAround(self):
+    def look_around(self):
         return self.description + " As you look around, you see the following objects: " \
                + ", ".join([x.name for x in self.objects])

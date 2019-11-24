@@ -1,6 +1,7 @@
 from graphics import *
-class Button:
 
+
+class Button:
     def __init__(self, rect: Rectangle, text: Text, item, function):
         self.rect = rect
         self.text = text
