@@ -33,11 +33,13 @@ class Item:
 
 
 class Door(Item):
-    def __init__(self, name, room1: str, room2: str, locked: bool, interact_dict={}, required_items=[]):
+    defaultDict = {0: "You try to open the door, but it remains firmly locked.\nIf only there was a way to "
+                      "unlock it...",
+                   "lockpicking pin": "Using your nimble fingers and recently acquired bobby pin, you carefully "
+                                      "pick the door's lock",
+                   "fulfilled": "You open the unlocked door, and move into the adjacent room."}
+    def __init__(self, name, room1: str, room2: str, locked: bool, interact_dict=defaultDict, required_items=[]):
         required_items.append(["lockpicking", "pin"])
-        interact_dict["lockpicking pin"] = "Using your nimble fingers and recently acquired bobby pin, you carefully " \
-                                           "pick the door's lock."
-        interact_dict["fulfilled"] = "You open the unlocked door, and move into the adjacent room."
         door_interact = Interaction(0, interact_dict, required_items, (not locked), self.interact_function)
         super().__init__(name, [], "You try to wrap your arms around the door to yank it off its hinges,"
                                    " but unsurprisingly, you can't do that. Oh well.", door_interact, False)
