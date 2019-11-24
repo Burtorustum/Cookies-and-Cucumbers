@@ -11,7 +11,7 @@ class Interaction:
         - fulfilled represents if the required objects have been collected and used, and will default to the
           "fulfilled" key in text; if there are no requirements, will default to None
     """
-    def __init__(self, levels : int, text : dict, required : list, fulfilled=None, interactFunc=None):
+    def __init__(self, levels : int, text : dict, required=[], fulfilled=None, interactFunc=None):
         self.levels = levels
         self.text = text
         self.required = required
@@ -21,7 +21,7 @@ class Interaction:
 
     # Changes the current interaction level by the given amount, bounding it within range [0, interaction.levels]
     def changeInteraction(self, changeAmount : int):
-        self.currentLevel = max(0, min(changeAmount, self.levels))
+        self.currentLevel = max(0, min(self.level + changeAmount, self.levels))
 
     # Returns the appropriate response to "Interact" command,
     # with required objects taking precedence over interaction level
