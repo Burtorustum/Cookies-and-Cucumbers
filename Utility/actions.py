@@ -1,21 +1,37 @@
-from Utility import Item, Player, Room
+from .Player import *
+from .Room import *
 
 
 def move(room: Room):
-    print(room.name)
+    return "You are now in the " + room.name
 
 
 def examine(item: Item):
-    print(item.name)
+    return item.getExamine()
 
 
 def interact(player: Player, item: Item):
-    print(item.name, player.clues)
+    return item.interact.getText(player)
+
 
 def pick_up(player: Player, item: Item):
-    if item.holdable:
+    if item.holdable and player.held_obj is None:
         player.held_obj = item
-    return item.pickup_text
+        return item.pickup
+    elif not item.holdable:
+        return item.pickup
+    else:
+        return "You're already carrying " + player.held_obj.name + \
+               ", and though you are self-assured in your extremely large arms for a child," \
+               " you can't quite carry both objects. You should really work on growing. Or maybe just drop what you're" \
+               "holding."
 
-def drop(player: Player):
-    if player.is_holding_obj()
+
+def drop(player: Player, currentRoom: Room):
+    held_obj = player.held_obj
+    if held_obj is not None:
+        currentRoom.objects.add(held_obj)
+        player.held_obj = None
+        return "You dropped the " + held_obj
+    else:
+        return "You fling your arms open wide as if you were dropping something, only you weren't holding anything."
