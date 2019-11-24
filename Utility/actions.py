@@ -1,13 +1,13 @@
 from .Player import *
 from .Room import *
-
+from .Item import *
 
 def move(room: Room):
     return "You are now in the " + room.name
 
 
 def examine(item: Item):
-    return item.getExamine()
+    return item.get_examine()
 
 
 def interact(player: Player, item: Item):

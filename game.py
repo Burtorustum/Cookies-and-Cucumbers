@@ -1,4 +1,5 @@
 from graphics import *
+from Utility.Button import Button
 import Utility.actions as act
 from Utility.Player import Player
 from Utility.Room import Room
@@ -21,44 +22,40 @@ def click_button(player: Player, window: GraphWin, cur_item=None):
     click = window.getMouse()
     s = None
     for b in buttons:
-        if in_rectangle(click, b[0]):
-            if b[3] is Item:
-                cur_item = b[3]
-                s = b[3].examine_text
-            else:
-                b[3](player)  # TODO: Not sure what to input here lol
-    update_window(player, window, cur_item, s)
-    return cur_item
+        if b.is_pressed(click):
+            cur_item = b.item
+            s = b.func(player)
+
+    update_window(player, window, buttons, s)
+    click_button(player, window, cur_item)
 
 
-def update_window(player: Player, window: GraphWin, buttons,  cur_item=None, s=None):
+def update_window(player: Player, window: GraphWin, buttons, s=None):
     window.delete("all")  # remove all current things in window
 
     player_notes(player, window)  # redraw the left hand stuff
-    context(player, window, s)
+    context(player, window, s)  # redraw the top stuff
 
     for b in buttons:  # draw the buttons
-        for x in b:
-            if x is Rectangle or x is Text:
-                x.draw(window)
+        b.draw(window)
 
     window.update()
-    return buttons
 
 
-# NOTE: Buttons are just going to be boxes, so each gen_button will just return a bunch of tuples of the form
-# (Rectangle, Text, object<or room?>), then can go through the list and for each tuple, draw onto the window.
-# then the func that checks for button presses can call the update window button w/ the object of the button.
+# TODO: FINISH
 def gen_buttons(player: Player, window: GraphWin):
     objects = player.cur_room.objects
     # get current room
     # get objects in current room
-    # make button for each object in room, that calls specific interact/examine/etc
+    # make button for each object in room, the function for which should be the examine func
     buttons = []
     for i in range(len(objects)):
         o = objects[i]
-        b = Rectangle(Point(), Point())
-    return []
+        rect = Rectangle(Point(), Point())
+        text = Text(Point(), o.name)
+        b = Button(rect, text, o, o.get_examine())
+        buttons.append(b)
+    return buttons
 
 
 # TODO: TEST GEN OBJECT BUTTONS
@@ -70,14 +67,14 @@ def gen_object_buttons(player: Player, window: GraphWin, item: Item):
     right = 1112.5
     middle = (right + left) / 2
 
-    interact_box = Rectangle(Point(left, 187.5 + 4 * diff), Point(right, 187.5 + 6 * diff))
+    interact_box = Rectangle(Point(left, 187.5 + diff), Point(right, 187.5 + 3*diff))
     interact_text = Text(Point(middle, (187.5 * 2 + 10 * diff) / 2), "Interact")
 
-    pickup_box = Rectangle(Point(left, 187.5 + 7 * diff), Point(right, 187.5 + 9 * diff))
+    pickup_box = Rectangle(Point(left, 187.5 + 4*diff), Point(right, 187.5 + 6*diff))
     pickup_text = Text(Point(middle, (187.5 * 2 + 16 * diff) / 2), "Pickup")
 
-    return [ # (interact_box, interact_text, item.interact()),  # THEY HAVE TO BE FUNC BECAUSE OF INTERACT?
-            (pickup_box, pickup_text, item.pickup_text())] # TODO: DO THESE TAKE IN PLAYER OR SOMETHING ELSE?
+    return [Button(interact_box, interact_text, None, item.interact.getText),
+            Button(pickup_box, pickup_text, None, item.get_pickup)]
 
 
 # TODO: Decide what else goes in here
@@ -102,20 +99,20 @@ def player_notes(player: Player, window: GraphWin):
     item_text.draw(window)
 
 
-def context(player: Player, window: GraphWin, cur_item=None):
+def context(player: Player, window: GraphWin, s):
     bar = window.getHeight() / 4
     top_line = Line(Point(250, bar), Point(window.getWidth(), bar))
     top_line.setWidth(4)
     top_line.draw(window)
 
-    context_string = player.cur_room.description if cur_item is None else cur_item.examine_text
+    if s is None:
+        context_string = player.cur_room.description
+    else:
+        context_string = s
+
     context_text = Text(Point(window.getWidth() / 2 + 125, window.getHeight() / 15), context_string)
     context_text.setSize(18)
     context_text.draw(window)
-
-
-def in_rectangle(point: Point, rect: Rectangle):
-    return rect.getP1().x < point.x < rect.getP2().x and rect.getP2().y < point.y < rect.getP1().y
 
 
 def main():
