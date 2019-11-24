@@ -77,6 +77,7 @@ class Door(Item):
                 return self.interact.text[self.interact.currentLevel]
 
 
+# TODO: Update with objects for each room
 def name_to_room(room: str):
     if room == "bedroom":
         return bedroom
@@ -89,6 +90,11 @@ def name_to_room(room: str):
     if room == "kitchen":
         return None
     return None
+
+# ---------------------------------------------------------------------------------------------------------------------
+# INSTANTIATIONS:
+
+# BEDROOM:
 
 
 bunnyExamine = ["You go over to the bunny and cage and you notice some cucumbers bagged up on the side, with a "
@@ -134,3 +140,17 @@ rockingHorse = Item("rocking horse", rockingHorseExamine, rockingHorsePickup, ro
 door = Door("door", "bedroom", "hallway", False)
 
 bedroom = Room("Bedroom", [bunny, books, globe, rockingHorse, door], "You are in your own bedroom.", [])
+
+# HALLWAY:
+
+
+# READING ROOM:
+
+
+# KITCHEN:
+
+
+# HALLWAY:
+
+
+# SERVANT'S QUARTERS:
