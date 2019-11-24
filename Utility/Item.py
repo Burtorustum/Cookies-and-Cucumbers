@@ -33,7 +33,7 @@ class Item:
 
 
 class Door(Item):
-    def __init__(self, name, room1: str, room2: str, locked: bool, interact_dict={}, required_items=[], fulfilled=False):
+    def __init__(self, name, room1: str, room2: str, locked: bool, interact_dict={}, required_items=[]):
         required_items.append(["lockpicking", "pin"])
         interact_dict["lockpicking pin"] = "Using your nimble fingers and recently acquired bobby pin, you carefully " \
                                            "pick the door's lock."
@@ -43,7 +43,6 @@ class Door(Item):
                                    " but unsurprisingly, you can't do that. Oh well.", door_interact, False)
         self.room1 = room1
         self.room2 = room2
-        self.fulfilled = fulfilled
 
     def get_examine(self, player: Player):
         if player.cur_room.name == self.room1:
@@ -62,7 +61,7 @@ class Door(Item):
         #  player_tools = player.skills.append(player.clues.append(player.held_item))
         # however, this would return None and modify the player skills permanently, increasing size forever
 
-        if self.fulfilled:
+        if self.interact.fulfilled:
             if player.cur_room.name == self.room1:
                 player.cur_room = name_to_room(self.room2)
             else:
@@ -70,10 +69,10 @@ class Door(Item):
             return self.interact.text["fulfilled"]
 
         for items in self.interact.required:
-            fulfilled = all((lambda x: x in player_tools) for item in items)
+            fulfilled = all(map(lambda x: x in player_tools, items))
             if fulfilled:
                 key_name = " ".join(items)
-                self.fulfilled = True
+                self.interact.fulfilled = True
                 return self.interact.text[key_name]
 
         return self.interact.text[self.interact.currentLevel]
@@ -140,10 +139,10 @@ rockingHorseInteractText = {0: "You try to sit on the rocking horse, but it's mu
 rockingHorseInteraction = Interaction(0, rockingHorseInteractText)
 rockingHorse = Item("Rocking horse", rockingHorseExamine, rockingHorsePickup, rockingHorseInteraction, True)
 
-window = Item("Window", window_examine, window_pickup, window_interact, False)
+#window = Item("Window", window_examine, window_pickup, window_interact, False)
 
 # TODO: Change to be unlocked, then locked after exiting first time, w dialogue
-bedroom_door = Door("Bedroom door", "Bedroom", "Hallway", False, fulfilled=True)
+bedroom_door = Door("Bedroom door", "Bedroom", "Hallway", True)
 
 bedroom = Room("Bedroom", [bunny, books, globe, rockingHorse, bedroom_door], "You are in your own bedroom.", [])
 
