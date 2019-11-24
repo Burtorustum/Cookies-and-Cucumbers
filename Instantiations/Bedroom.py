@@ -42,6 +42,6 @@ rockingHorseInteractText = {0: "You try to sit on the rocking horse, but it's mu
 rockingHorseInteraction = Interaction(0, rockingHorseInteractText)
 rockingHorse = Item("rocking horse", rockingHorseExamine, rockingHorsePickup, rockingHorseInteraction, True)
 
-# door = Door("door to hallway", bedroom, room2, False)
+door = Door("door", "bedroom", "hallway", False)
 
-bedroom = Room("bedroom", [bunny, books, globe, rockingHorse], "You are in your own bedroom.", [])
+bedroom = Room("bedroom", [bunny, books, globe, rockingHorse, door], "You are in your own bedroom.", [])
