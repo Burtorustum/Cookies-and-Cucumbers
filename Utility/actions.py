@@ -1,4 +1,3 @@
-from .Player import *
 from .Room import *
 from .Item import *
 
@@ -16,7 +15,7 @@ def interact(player: Player, item: Item):
 
 
 def pick_up(player: Player, item: Item):
-    if item.holdable and player.held_item is None:
+    if item.holdable and not player.held_item:
         player.held_item = item
         player.cur_room.objects.remove(item)
         return item.get_pickup(player)
@@ -31,9 +30,9 @@ def pick_up(player: Player, item: Item):
 
 def drop(player: Player):
     held_item = player.held_item
-    if held_item is not None:
+    if held_item :
         player.cur_room.objects.append(held_item)
-        player.held_item = None
+        player.held_item = []
         return "You dropped the " + held_item.name
     else:
         return "You fling your arms open wide as if you were dropping something, only you weren't holding anything."

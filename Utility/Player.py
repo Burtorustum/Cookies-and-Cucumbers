@@ -1,6 +1,7 @@
 class Player:
     def __init__(self):
-        self.held_item = None
+        self.held_item = []  # Using an empty list here cause we can concat it with no issues + it doubles as a boolean
+        # Note: this is terrible
         self.clues = []
         self.skills = []
         self.cur_room = None

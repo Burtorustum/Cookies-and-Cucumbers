@@ -113,7 +113,7 @@ def player_notes(player: Player, window: GraphWin):
     room_text.draw(window)
 
     item_string = "Current Item:\n"
-    if player.held_item is None:
+    if not player.held_item:
         item_string += "None"
     else:
         item_string += player.held_item.name

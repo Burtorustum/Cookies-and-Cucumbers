@@ -1,5 +1,4 @@
 from .Interactions import *
-from .Room import *
 from .Player import *
 
 
@@ -33,12 +32,12 @@ class Item:
 
 
 class Door(Item):
-    def __init__(self, name, room1: str, room2: str, locked: bool, interactDict={}, requiredItems=[]):
-        requiredItems.append(["lockpicking", "pin"])
-        interactDict["lockpicking pin"] = "Using your nimble fingers and recently acquired bobby pin, you carefully " \
+    def __init__(self, name, room1: str, room2: str, locked: bool, interact_dict={}, required_items=[]):
+        required_items.append(["lockpicking", "pin"])
+        interact_dict["lockpicking pin"] = "Using your nimble fingers and recently acquired bobby pin, you carefully " \
                                           "pick the door's lock."
-        interactDict["fulfilled"] = "You open the unlocked door, and move into the adjacent room."
-        door_interact = Interaction(0, interactDict, requiredItems, (not locked), self.interact_function)
+        interact_dict["fulfilled"] = "You open the unlocked door, and move into the adjacent room."
+        door_interact = Interaction(0, interact_dict, required_items, (not locked), self.interact_function)
         super().__init__(name, [], "You try to wrap your arms around the door to yank it off its hinges,"
                                    " but unsurprisingly, you can't do that. Oh well.", door_interact, False)
         self.room1 = room1
@@ -57,7 +56,9 @@ class Door(Item):
                 return "The locked door leads to the " + self.room1
 
     def interact_function(self, player: Player):
-        player_tools = player.skills.append(player.clues.append(player.held_item))
+        player_tools = player.skills + (player.clues + player.held_item)  # Previously:
+        #  player_tools = player.skills.append(player.clues.append(player.held_item))
+        # however, this would return None and modify the player skills permanently, increasing size forever
         for items in self.interact.required:
             fulfilled = all((lambda x: x in player_tools) for item in items)
             if fulfilled:
@@ -65,9 +66,9 @@ class Door(Item):
                 self.fulfilled = True
                 return self.interact.text[key_name]
         else:
-            if self.fulfilled: # TODO: Check fulfillment first
+            if self.fulfilled:  # TODO: Check fulfillment first
                 if player.cur_room.name == self.room1:
-                    player.cur_room = name_to_room(self.room2)  # TODO: Implement name_to_room
+                    player.cur_room = name_to_room(self.room2)
                 else:
                     player.cur_room = name_to_room(self.room1)
                 return self.interact.text["fulfilled"]
