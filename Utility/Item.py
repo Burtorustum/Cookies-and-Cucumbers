@@ -97,15 +97,15 @@ def name_to_room(room: str):
 
 # bad but works...
 def parse_text(text: str):
-    # return "\n".join(text[i: i + 105] for i in range(0, len(text), 105))
     max_len = 90
     indices = [i for i, x in enumerate(text) if x == " "]
     split_text = text.split(" ")
-    ret_string = ""
+
     for i in range(len(indices)):
         if indices[i] > max_len:
             max_len += 90
             split_text[i] += "\n"
+
     return ' '.join(split_text)
 
 
@@ -140,12 +140,12 @@ narration_interact_text = {
        "cookies..."}
 
 
-def narration_interact_func(player: Player):
+def _narration_interact_func(player: Player):
     player.cur_room = dark_bedroom
     return narration_interact_text[0]
 
 
-narration_interact = Interaction(0, narration_interact_text, interactFunc=narration_interact_func)
+narration_interact = Interaction(0, narration_interact_text, interactFunc=_narration_interact_func)
 
 listen = Item("Put ear to door", narration_text, "What does that even mean?", narration_interact, False, "")
 
@@ -154,8 +154,6 @@ narration_room = Room("Dark Bedroom", [listen], "Someone is talking outside your
 # DARK BEDROOM
 
 light_examine = ["It's your bedside lamp."]
-# ["You fumble around in the dark, eventually finding the lamp.",  # WHY ARE THESE LISTS??
-# "It's your lamp."]  # --> Is there a way to have different examine text based on level?
 light_pickup = "The lamp is attached to the wall, you can't pick it up!"
 light_interact_text = {0: "You flip on the lamp, and the room is illuminated.",
                        1: "You flip off the lamp, and the room plunges back into darkness"}
@@ -193,10 +191,10 @@ bunnyExamine = ["You go over to the bunny and cage and you notice some cucumbers
                 "deathly "
                 "allergic to cucumbers… You can do with the cucumbers\nwhat you please, although your poor bunny sounds"
                 "like he's really hungry."]
-bunnyPickup = "Against all rules of the theory of human interaction with cute fluffy small animals, " \
-              "you ignore your starving bunny and pick him up in his cage."
-bunnyInteractText = {0: "You feed the bunny a bit of cucumber. It seems slightly happier."}
-# TODO: changing state of bunny before and after feeding it?
+bunnyPickup = parse_text("Against all rules of the theory of human interaction with cute fluffy small animals, "
+                         "you ignore your starving bunny and pick him up in his cage.")
+bunnyInteractText = {0: "You feed the bunny a bit of cucumber. It seems a bit happier."}
+# TODO: Make it so the bunny has levels of happiness (interact levels)
 bunnyInteraction = Interaction(0, bunnyInteractText)
 bunny = Item("Bunny", bunnyExamine, bunnyPickup, bunnyInteraction, True, "Bedroom")
 
