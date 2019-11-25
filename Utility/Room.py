@@ -1,9 +1,8 @@
 class Room:
-    def __init__(self, name: str, objects: list, description: str, adj_rooms: list):
+    def __init__(self, name: str, objects: list, description: str):
         self.name = name
         self.objects = objects
         self.description = description
-        self.adjRooms = adj_rooms
 
     # Returns the appropriate "Look Around" command response
     def look_around(self):

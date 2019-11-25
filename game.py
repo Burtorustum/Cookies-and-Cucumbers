@@ -137,7 +137,7 @@ def context(player: Player, window: GraphWin, s):
 
 def main():
     player = Player()
-    player.cur_room = dark_bedroom
+    player.cur_room = narration_room
 
     window = GraphWin("Cookies and Cucumbers", 1400, 750, autoflush=False)
 

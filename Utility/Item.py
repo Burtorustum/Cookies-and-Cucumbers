@@ -95,18 +95,61 @@ def name_to_room(room: str):
     return None
 
 
+# bad but works...
+def parse_text(text: str):
+    # return "\n".join(text[i: i + 105] for i in range(0, len(text), 105))
+    max_len = 90
+    indices = [i for i, x in enumerate(text) if x == " "]
+    split_text = text.split(" ")
+    ret_string = ""
+    for i in range(len(indices)):
+        if indices[i] > max_len:
+            max_len += 90
+            split_text[i] += "\n"
+    return ' '.join(split_text)
+
+
 # ---------------------------------------------------------------------------------------------------------------------
 # INSTANTIATIONS:
 
 # INTRO NARRATION
 
-narration_text = "\"No cookies!\" hisses your stepmother, Monica. Ear pressing against your bedroom door, " \
-                 "you’re eavesdropping on your stepmother’s hallway conversation with the butler.\"And don’t let them " \
-                 "out of the room! Not if you know what's good for you!\" Monica stomps off and her footsteps fade " \
-                 "down the hallway, and you hear Butler [Eaveswood] give a muffled sigh. Stepmother is being mean " \
-                 "again, you think to yourself, and using the lamplight streaming from under the door to guide you, " \
-                 "you tiptoe back to your bed. She’s mean. Father will be back soon. Back to tuck you in bed. No " \
-                 "cookies? You frown. Then you smile. Yes cookies! :)) "
+narration_text = [parse_text("\"No cookies!\" hisses your stepmother, Monica. Ear pressed against your bedroom door, "
+                             "you’re eavesdropping on your stepmother’s hallway conversation with the butler.\"And "
+                             "don’t let "
+                             "them "
+                             "out of the room! Not if you know what's good for you!\"Monica stomps off and her "
+                             "footsteps fade "
+                             "down the hallway, and you hear Butler [Eaveswood] give a muffled sigh. Stepmother is "
+                             "being mean "
+                             "again, you think to yourself, and using the lamplight streaming from under the door to "
+                             "guide you, "
+                             "you tiptoe back to your bed. No "
+                             "cookies? You frown.Then you smile. Yes cookies! :)) ")]
+
+narration_interact_text = {
+    0: "A little later, you hear the familiar footsteps of your father approaching your door. The door "
+       "eases open,\n"
+       "and the silhouette of father comes in, trailed by Butler Eaveswood."
+       "Sitting on the side of your bed, \nyour father and Eaveswood pull back the covers for you and you "
+       "lie back in a mountain of pillows.\n"
+       "\"Goodnight, sleep well,\" says father, eyes crinkling with a smile. The "
+       "sliver of light from the hallway\n disappears as the door closes between "
+       "the two. You are now alone in bed,\nsurrounded again by darkness and "
+       "the crack of orange glow underneath the door.\nNow, about those "
+       "cookies..."}
+
+
+def narration_interact_func(player: Player):
+    player.cur_room = dark_bedroom
+    return narration_interact_text[0]
+
+
+narration_interact = Interaction(0, narration_interact_text, interactFunc=narration_interact_func)
+
+listen = Item("Put ear to door", narration_text, "What does that even mean?", narration_interact, False, "")
+
+narration_room = Room("Dark Bedroom", [listen], "Someone is talking outside your door...")
 
 # DARK BEDROOM
 
@@ -132,7 +175,7 @@ light = Item("Lamp", light_examine, light_pickup, light_interact, False, "Dark B
 
 dark_bedroom = Room("Dark Bedroom", [light],
                     "A little later, you hear the familiar footsteps of your father approaching your door. The door "
-                    "eases open,\n" 
+                    "eases open,\n"
                     "and the silhouette of father comes in, trailed by Butler Eaveswood."
                     "Sitting on the side of your bed, \nyour father and Eaveswood pull back the covers for you and you "
                     "lie back in a mountain of pillows.\n"
@@ -140,8 +183,7 @@ dark_bedroom = Room("Dark Bedroom", [light],
                     "sliver of light from the hallway\n disappears as the door closes between "
                     "the two. You are now alone in bed,\nsurrounded again by darkness and "
                     "the crack of orange glow underneath the door.\nNow, about those "
-                    "cookies...",
-                    [])
+                    "cookies...")
 
 # BEDROOM:
 
@@ -195,11 +237,11 @@ rockingHorse = Item("Rocking horse", rockingHorseExamine, rockingHorsePickup, ro
 # TODO: Change to be unlocked, then locked after exiting first time, w dialogue
 bedroom_door = Door("Bedroom door", "Bedroom", "Hallway", True)
 
-bedroom = Room("Bedroom", [light, bunny, books, globe, rockingHorse, bedroom_door], "You are in your own bedroom.", [])
+bedroom = Room("Bedroom", [light, bunny, books, globe, rockingHorse, bedroom_door], "You are in your own bedroom.")
 
 # HALLWAY:
 
-hallway = Room("Hallway", [bedroom_door], "This hallway connects every room in the house. How convenient!", [])
+hallway = Room("Hallway", [bedroom_door], "This hallway connects every room in the house. How convenient!")
 
 # READING ROOM:
 
