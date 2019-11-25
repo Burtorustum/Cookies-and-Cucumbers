@@ -29,7 +29,7 @@ class Interaction:
     # i.e. if a player is on interaction level 1 and also has gathered all required skills, objects, and clues to
     # interact with object, will return the latter interact text
     def get_text(self, player: Player):
-        if self.interactFunc is None:
+        if self.interactFunc is None:  # TODO: Check for held item and see if can be used, if not return text saying so
             player_tools = player.skills.append(player.clues.append(player.held_item))
             for items in self.required:
                 fulfilled = all((lambda x: x in player_tools) for item in items)

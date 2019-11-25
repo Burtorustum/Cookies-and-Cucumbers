@@ -16,7 +16,7 @@ def interact(player: Player, item: Item):
 
 def pick_up(player: Player, item: Item):
     if item.holdable and not player.held_item:
-        player.held_item += item
+        player.held_item = item
         player.cur_room.objects.remove(item)
         return item.get_pickup(player)
     elif not item.holdable:

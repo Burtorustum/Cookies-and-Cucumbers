@@ -1,8 +1,6 @@
 from graphics import *
 from Utility.Button import Button
 import Utility.actions as act
-from Utility.Player import Player
-from Utility.Room import Room
 from Utility.Item import *
 
 
@@ -139,7 +137,7 @@ def context(player: Player, window: GraphWin, s):
 
 def main():
     player = Player()
-    player.cur_room = bedroom
+    player.cur_room = dark_bedroom
 
     window = GraphWin("Cookies and Cucumbers", 1400, 750, autoflush=False)
 

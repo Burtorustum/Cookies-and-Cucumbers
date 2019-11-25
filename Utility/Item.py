@@ -38,11 +38,12 @@ class Door(Item):
                    "lockpicking pin": "Using your nimble fingers and recently acquired bobby pin, you carefully "
                                       "pick the door's lock",
                    "fulfilled": "You open the unlocked door, and move into the adjacent room."}
+
     def __init__(self, name, room1: str, room2: str, locked: bool, interact_dict=defaultDict, required_items=[]):
         required_items.append(["lockpicking", "pin"])
         door_interact = Interaction(0, interact_dict, required_items, (not locked), self.interact_function)
-        super().__init__(name, [], "You try to wrap your arms around the door to yank it off its hinges,"
-                                   " but unsurprisingly, you can't do that. Oh well.", door_interact, False)
+        super().__init__(name, [], "You try to wrap your arms around the door to yank it off its hinges,\n"
+                                   "but unsurprisingly, you can't do that. Oh well.", door_interact, False)
         self.room1 = room1
         self.room2 = room2
 
@@ -59,9 +60,7 @@ class Door(Item):
                 return "The locked door leads to the " + self.room1
 
     def interact_function(self, player: Player):
-        player_tools = player.skills + player.clues + player.held_item  # Previously:
-        #  player_tools = player.skills.append(player.clues.append(player.held_item))
-        # however, this would return None and modify the player skills permanently, increasing size forever
+        player_tools = player.skills + player.clues + [player.held_item] if player.held_item != [] else []
 
         if self.interact.fulfilled:
             if player.cur_room.name == self.room1:
@@ -94,59 +93,91 @@ def name_to_room(room: str):
         return None
     return None
 
+
 # ---------------------------------------------------------------------------------------------------------------------
 # INSTANTIATIONS:
+
+# DARK BEDROOM
+light_examine = ["You fumble around in the dark, eventually finding the lamp.",  # WHY ARE THESE LISTS??
+                 "It's your lamp."]  # --> Is there a way to have different examine text based on level?
+light_pickup = "The lamp is attached to the wall! I can't pick it up!"
+light_interact_text = {0: "You flip on the lamp, and the room is illuminated.",
+                       1: "You flip off the lamp, and the room plunges back into darkness"}
+
+
+def _lightswitch(player: Player):
+    if player.cur_room.name == "Dark Bedroom":
+        player.cur_room = bedroom
+        return light_interact_text[0]
+
+    player.cur_room = dark_bedroom
+    return light_interact_text[1]
+
+
+light_interact = Interaction(0, light_interact_text, interactFunc=_lightswitch)
+light = Item("Lamp", [light_examine], light_pickup, light_interact, False)
+
+dark_bedroom = Room("Dark Bedroom", [light], "Goodnight, sleep well, says father, eyes crinkling with a smile. The "
+                                             "sliver of light from the hallway\n disappears as the door closes between "
+                                             "the two. You are now alone in bed,\nsurrounded again by darkness and "
+                                             "the crack of orange glow underneath the door.\nNow, about those "
+                                             "cookies.",
+                    [])
 
 # BEDROOM:
 
 
 bunnyExamine = ["You go over to the bunny and cage and you notice some cucumbers bagged up on the side, \nwith a "
                 "paper note "
-                "from your nanny reminding you not to eat the cucumbers. \nAs if you would forget that you were "
-                "deathly"
+                "from your nanny reminding you not to eat the cucumbers. \nAs if you would forget that you are "
+                "deathly "
                 "allergic to cucumbers… You can do with the cucumbers\nwhat you please, although your poor bunny sounds"
                 "like he's really hungry."]
 bunnyPickup = "Against all rules of the theory of human interaction with cute fluffy small animals, " \
               "you ignore your starving bunny and pick him up in his cage."
-bunnyInteractText = {0: "You do something to interact with the bunny"}
+bunnyInteractText = {0: "You feed the bunny a bit of cucumber. It seems slightly happier."}
+# TODO: changing state of bunny before and after feeding it?
 bunnyInteraction = Interaction(0, bunnyInteractText)
 bunny = Item("Bunny", bunnyExamine, bunnyPickup, bunnyInteraction, True)
 
-booksExamine = ["There are three books on your bookshelf. Your stepmother took away all your others when"
+booksExamine = ["There are three books on your bookshelf. Your stepmother took away all your others when\n"
                 "she caught you reading them late at night, so there's not much left now. \nHansel and Gretel: Man,"
                 "you really want some cookies\nA heavily abridged encyclopedia: You definitely haven't fed your "
-                "bunny some of the pages\nWheelock's Latin: A book in some foreign language by someone named R. S. Enic."
+                "bunny some of the pages\nWheelock's Latin: A book in some foreign language by someone named R. S. "
+                "Enic. "
                 "What a weird name."]
 booksPickup = "You grab the three books from the bookshelf."
-bookInteractText = {0: "You are so desperate to take your mind off of cookies that you start reading the encyclopedia, "
+bookInteractText = {0: "You are so desperate to take your mind off of cookies that you start reading the "
+                       "encyclopedia,\n "
                        "but quickly realize your mistake. Who wants to read that?",
                     1: "Reading the books didn't distract you from the thought of cookies before, but maybe you can "
-                       "try again... Nope, still didn't work."}
+                       "try again...\nNope, still didn't work."}
 bookInteraction = Interaction(1, bookInteractText)
 books = Item("Books", booksExamine, booksPickup, bookInteraction, True)
 
-globeExamine = ["Your real mother gave this globe to you as a birthday present just a few weeks before she died. On it,"
-                " you can still see the faded circles on the places you and her and father planned to visit on your "
+globeExamine = ["Your real mother gave this globe to you as a birthday present just a few weeks before she died. \nOn "
+                "it, "
+                " you can still see the faded circles on the places you and her and father planned\nto visit on your "
                 "trip around the world."]
 globePickup = "You pick up the globe rather awkwardly."
 globeInteractText = {0: "You spin the globe absent-mindedly. Nothing happens."}
 globeInteraction = Interaction(0, globeInteractText)
 globe = Item("Globe", globeExamine, globePickup, globeInteraction, True)
 
-rockingHorseExamine = ["You always wanted a real horse, but father always said that you couldn't take care of one."
+rockingHorseExamine = ["You always wanted a real horse, but father always said that you couldn't take care of one.\n"
                        "Instead he got you this rocking horse. It's too small for you now."]
 rockingHorsePickup = "You struggle to lift up the wooden horse, but you eventually get a good grip."
-rockingHorseInteractText = {0: "You try to sit on the rocking horse, but it's much too small for you, and you quickly"
-                               "get off for fear of breaking it."}
+rockingHorseInteractText = {0: "You try to sit on the rocking horse, but it's much too small for you, \nand you quickly"
+                               " get off for fear of breaking it."}
 rockingHorseInteraction = Interaction(0, rockingHorseInteractText)
 rockingHorse = Item("Rocking horse", rockingHorseExamine, rockingHorsePickup, rockingHorseInteraction, True)
 
-#window = Item("Window", window_examine, window_pickup, window_interact, False)
+# window = Item("Window", window_examine, window_pickup, window_interact, False)
 
 # TODO: Change to be unlocked, then locked after exiting first time, w dialogue
 bedroom_door = Door("Bedroom door", "Bedroom", "Hallway", True)
 
-bedroom = Room("Bedroom", [bunny, books, globe, rockingHorse, bedroom_door], "You are in your own bedroom.", [])
+bedroom = Room("Bedroom", [light, bunny, books, globe, rockingHorse, bedroom_door], "You are in your own bedroom.", [])
 
 # HALLWAY:
 
