@@ -232,10 +232,28 @@ rockingHorse = Item("Rocking horse", rockingHorseExamine, rockingHorsePickup, ro
 
 # window = Item("Window", window_examine, window_pickup, window_interact, False)
 
-# TODO: Change to be unlocked, then locked after exiting first time, w dialogue
+# TODO: Change to be unlocked, then locked after exiting first time, w dialogue (item instead of door)
 bedroom_door = Door("Bedroom door", "Bedroom", "Hallway", True)
 
-bedroom = Room("Bedroom", [light, bunny, books, globe, rockingHorse, bedroom_door], "You are in your own bedroom.")
+window_examine = ["You stare wistfully at the totally normal and ordinary window. Why? Who knows."]
+window_pickup = "You try to carry a window attached to the wall... Unsurprisingly, you fail."
+window_interact_text = {
+    0: parse_text(
+        "As you lean in towards the window, you can almost smell a batch of cookies wafting up from below. Yep, "
+        "definitely cookies. Who could be making cookies this late? Doesn’t matter. Maybe you can get some! You "
+        "can’t lean out too far though, because the window can’t hold itself up, and you’re not really in the mood for "
+        "death by window guillotine. Yo do notice, however, a small ledge right under the window..."),
+    "Rocking horse": "You successfully prop open the window with the rocking horse.",
+    "fulfilled": "You hop out the window onto the ledge, and carefully make your way to the adjacent window. You "
+                 "enter the Reading Room. "}
+
+# TODO: Give this an actual interact func so that u can travel out the window (connect to event for pick up gold guy)
+window_interact = Interaction(0, window_interact_text, required=[[rockingHorse.name]])
+
+window = Item("Window", window_examine, window_pickup, window_interact, False, "Bedroom")
+
+bedroom = Room("Bedroom", [light, bunny, books, globe, rockingHorse, bedroom_door, window], "You are in your own "
+                                                                                            "bedroom.")
 
 # HALLWAY:
 

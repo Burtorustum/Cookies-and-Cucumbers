@@ -30,18 +30,22 @@ class Interaction:
     # interact with object, will return the latter interact text
     def get_text(self, player: Player):
         if self.interactFunc is None:  # TODO: Check for held item and see if can be used, if not return text saying so
-            player_tools = player.skills.append(player.clues.append(player.held_item))
+            player_tools = player.skills + player.clues + ([player.held_item] if player.held_item != [] else [])
+            player_tools = list(map(lambda x: x if x is str else x.name, player_tools))
+            print(player_tools)
+
             for items in self.required:
-                fulfilled = all((lambda x: x in player_tools) for item in items)
+                fulfilled = all(map(lambda x: x in player_tools, items))
                 if fulfilled:
                     keyName = " ".join(items)
                     self.fulfilled = True
+                    # TODO: Add a check to remove player item if it is used.
                     return self.text[keyName]
+
+            if self.fulfilled:
+                return self.text["fulfilled"]
             else:
-                if self.fulfilled:
-                    return self.text["fulfilled"]
-                else:
-                    self.change_interaction(1)
-                    return self.text[self.currentLevel]
+                self.change_interaction(1)
+                return self.text[self.currentLevel]
         else:
             return self.interactFunc(player)
