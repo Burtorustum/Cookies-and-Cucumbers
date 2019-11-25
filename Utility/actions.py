@@ -30,8 +30,9 @@ def pick_up(player: Player, item: Item):
 
 def drop(player: Player):
     held_item = player.held_item
-    if held_item :
-        player.cur_room.objects.append(held_item)
+    if held_item:
+        # player.cur_room.objects.append(held_item)
+        name_to_room(held_item.room).objects.append(held_item)
         player.held_item = []
         return "You dropped the " + held_item.name
     else:

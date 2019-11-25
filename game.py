@@ -130,7 +130,7 @@ def context(player: Player, window: GraphWin, s):
     else:
         context_string = s
 
-    context_text = Text(Point(window.getWidth() / 2 + 125, window.getHeight() / 9), context_string)
+    context_text = Text(Point(window.getWidth() / 2 + 125, window.getHeight() / 8), context_string)
     context_text.setSize(18)
     context_text.draw(window)
 
