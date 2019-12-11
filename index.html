@@ -18,27 +18,7 @@
 She’s mean. Father will be back soon. Back to tuck you in bed. 
 
 No cookies? You frown. Then you smile. Yes cookies! :))
-[[Go to bed-&gt;Intro 2]]</tw-passagedata><tw-passagedata pid="2" name="Startup" tags="startup" position="23,28" size="100,200">(set: $held_item to &quot;Nothing&quot;)
-(set: $clue_1 to false)
-(set: $clue_2 to false)
-(set: $clue_3 to false)
-(set: $keys to false)
-(set: $lockpick to false)
-
-(set: $lamp_on to false)
-(set: $window_open to false)
-(set: $stay_in_room to false)
-(set: $ledge_visited to false)
-(set: $bedroom_open to false)
-(set: $rr_open to false)
-(set: $locked_in to false)
-(set: $servant_there to true)
-(set: $kitchen_visited to false)
-
-(set: $run_count to 1)
-(set: $show_footer to false)
-
-(set: $achievements to (dm: &quot;Kids Who Run Away&quot;, false, &quot;Burning Your Bridges&quot;, false, &quot;Veggie Predator&quot;, false, &quot;Is this the Krusty Krab?&quot;, false))</tw-passagedata><tw-passagedata pid="3" name="footer" tags="footer" position="246,26" size="100,200">(if: $show_footer)[---
+[[Go to bed-&gt;Intro 2]]</tw-passagedata><tw-passagedata pid="2" name="Startup" tags="startup" position="23,28" size="100,200">(set: $held_item to &quot;Nothing&quot;)(set: $clue_1 to false)(set: $clue_2 to false)(set: $clue_3 to false)(set: $keys to false)(set: $lockpick to false)(set: $lamp_on to false)(set: $window_open to false)(set: $stay_in_room to false)(set: $ledge_visited to false)(set: $bedroom_open to false)(set: $rr_open to false)(set: $locked_in to false)(set: $servant_there to true)(set: $kitchen_visited to false)(set: $run_count to 1)(set: $show_footer to false)(set: $achievements to (dm: &quot;Kids Who Run Away&quot;, false, &quot;Burning Your Bridges&quot;, false, &quot;Veggie Predator&quot;, false, &quot;Is this the Krusty Krab?&quot;, false))</tw-passagedata><tw-passagedata pid="3" name="footer" tags="footer" position="246,26" size="100,200">(if: $show_footer)[---
 Current Held Item: $held_item
 (if: $held_item is not &quot;Nothing&quot;)[Drop Item (click-replace: &quot;Drop Item&quot;)[(set: $held_item to &quot;Nothing&quot;) Dropped!]]]</tw-passagedata><tw-passagedata pid="4" name="Header" tags="header" position="133,28" size="100,200">(enchant: &quot;Achievement Get!&quot;, (text-colour: yellow) + (text-style: &#39;bold&#39;))</tw-passagedata><tw-passagedata pid="5" name="Intro 2" tags="hide-footer" position="1151,189" size="100,100">A little later, you hear the familiar footsteps of your father approaching your door. 
 
